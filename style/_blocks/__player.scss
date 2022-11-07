@@ -1,0 +1,106 @@
+.player{
+  position: fixed;
+  max-width: 1228px;
+  left: 0;
+  right: 0;
+  bottom: -100%;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(6px);
+  border-radius: 20px;
+  margin: 0 auto;
+  transition: bottom ease .5s;
+  padding: 24px;
+  &__container{
+    display: grid;
+    grid-template-columns: 1fr 1fr 3fr 1fr;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+  &__track-info{
+
+  }
+  &_active{
+    bottom: 26px;
+  } 
+  &__controller{
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+  &__icon{
+    display: block;
+    width: 24px;
+    height: 24px;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  &__icon_stop{
+    background-image: url('../icons/stop.svg');
+  }
+  &__icon_prev{
+    background-image: url('../icons/prev.svg');
+  }
+  &__icon_pause{
+    background-image: url('../icons/pause_player.svg');
+  }
+  &__icon_play{
+    background-image: url('../icons/play_player.svg');
+  }
+  &__icon_next{
+    background-image: url('../icons/next.svg');
+  }
+  &__icon_favorite{
+    background-image: url('../icons/like.svg');
+  }
+  &__progress-wrap{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  &__progress{
+    flex-grow: 1;
+    max-width: 487px;
+  }
+  &__progress-input{
+    width: 100%;
+    padding: 9px 0;
+    cursor: pointer;
+    background-color: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+
+    &::-webkit-slider-runnable-track{
+      background-color: #1e5a32;
+      border: none;
+      border-radius: 20px;
+      height: 6px;
+      transition: background-color 0.3s ease;
+      &:hover,
+      &:focus{
+        background-color: #e6a93f;
+      }
+    }
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 24px;
+      margin-top: -9px;
+      border-radius: 30px;
+      box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+      background: #FFFFFF;
+      transition: background-color 0.3s ease;
+      &:hover,
+      &:focus{
+        background-color: #000;
+      }
+    }
+    &__time{
+      font-size: 14px;
+      display: flex;
+      gap: 4px;
+    }
+  }
+
+
+}
