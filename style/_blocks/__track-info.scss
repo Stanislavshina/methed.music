@@ -1,0 +1,12 @@
+.track-info{
+  text-align: left;
+  
+  &__title{
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  &__artist{
+    font-weight: 300;
+    font-size: 14px;
+  }
+}
