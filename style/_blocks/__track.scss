@@ -55,3 +55,14 @@
     width: 100%;
   }
 }
+
+@media(max-width: 560px) {
+  .track{
+    padding: 3px;
+    border-width: 1px;
+    border-radius: 14px;
+    &__info{
+      padding: 8px;
+    }
+  }
+}

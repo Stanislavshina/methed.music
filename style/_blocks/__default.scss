@@ -8,6 +8,17 @@
 body{
   padding-bottom: 172px;
 }
+@media (max-width: 768px) {
+  body{
+    padding-bottom: 217px;
+  }
+}
+
+@media (max-width:740px) {
+  body{
+    padding-bottom: 187px;
+  }
+}
 
 a {
   text-decoration: none;

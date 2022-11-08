@@ -7,10 +7,12 @@
     padding: 0 30px;
     margin: 0 auto;
     display: flex;
+    justify-content: space-between;
     align-items: center;
+    gap: 25px;
   }
   &__logo{
-    margin-right: 94px;
+    margin-right: 69px;
   }
   &__search{
     flex-grow: 1;
@@ -23,6 +25,47 @@
     transition: color .2s ease-in-out;
     &:hover {
       color: tomato;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .header{
+    &__container{
+      max-width: 1024px;
+      padding: 0 22px;
+    }
+    &__search{
+      margin-right: 90px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .header{
+    &__container{
+      padding: 0 15px;
+      max-width: 610px;
+    }
+    &__logo{
+      margin-right: 12px;
+    }
+    &__search{
+      margin-right: 0;
+    }
+  }
+}
+
+@media (max-width: 560px) {
+  .header{
+    padding-top: 20px;
+    &__container{
+      flex-wrap: wrap;
+      gap: 17px;
+    }
+    &__search{
+      order: 1;
+      flex-basis: 100%;
     }
   }
 }
