@@ -14,7 +14,7 @@
     overflow: hidden;
     line-height: 0;
     position: relative;
-    &::after{
+    .track_active &::after{
       content: '';
       display: block;
       background-color: rgba(255, 255, 255, 0.8);
@@ -31,6 +31,9 @@
       opacity: 0;
       transition: all ease-in-out 0.5s;
     }
+    .track_pause &::after{
+      background-image: url('../icons/play.svg');
+    }
   }
 
   &:hover .track__img-wrap::after,
@@ -46,6 +49,9 @@
     opacity: 1;
     transform:translate(-50%, -50%) rotate(0deg);
     background-image: url('../icons/pause.svg');
+  }
+  &_pause .track__img-wrap::after{
+    background-image: url('../icons/play.svg');
   }
   &__info{
     background-color: #ffffff;

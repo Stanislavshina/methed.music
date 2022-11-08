@@ -549,7 +549,7 @@ template {
   line-height: 0;
   position: relative;
 }
-.track__img-wrap::after {
+.track_active .track__img-wrap::after {
   content: "";
   display: block;
   background-color: rgba(255, 255, 255, 0.8);
@@ -566,6 +566,9 @@ template {
   opacity: 0;
   transition: all ease-in-out 0.5s;
 }
+.track_pause .track__img-wrap::after {
+  background-image: url("../icons/play.svg");
+}
 .track:hover .track__img-wrap::after, .track:focus .track__img-wrap::after {
   transform: translate(-50%, -50%) rotate(0deg);
   opacity: 1;
@@ -578,6 +581,9 @@ template {
   opacity: 1;
   transform: translate(-50%, -50%) rotate(0deg);
   background-image: url("../icons/pause.svg");
+}
+.track_pause .track__img-wrap::after {
+  background-image: url("../icons/play.svg");
 }
 .track__info {
   background-color: #ffffff;
