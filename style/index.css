@@ -678,6 +678,9 @@ template {
 .player__icon_favorite {
   background-image: url("../icons/like.svg");
 }
+.player__icon_favorite_active {
+  filter: drop-shadow(0 0 3px tomato);
+}
 .player__progress-wrap {
   display: flex;
   align-items: center;
@@ -757,10 +760,10 @@ template {
   transition: background-color 0.3s ease;
 }
 .player__icon_mute {
-  background-image: url("../icons/volume-on.svg");
-}
-.player__icon_mute-off {
   background-image: url("../icons/mute.svg");
+}
+.player__icon_mute-on {
+  background-image: url("../icons/volume-on.svg");
 }
 
 @media (max-width: 1024px) {

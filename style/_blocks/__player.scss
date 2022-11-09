@@ -52,6 +52,9 @@
   }
   &__icon_favorite{
     background-image: url('../icons/like.svg');
+    &_active{
+      filter: drop-shadow(0 0 3px tomato);
+    }
   }
   &__progress-wrap{
     display: flex;
@@ -131,9 +134,9 @@
     }
   }
   &__icon_mute{
-    background-image: url('../icons/volume-on.svg');
-    &-off{
-      background-image: url('../icons/mute.svg');
+    background-image: url('../icons/mute.svg');
+    &-on{
+      background-image: url('../icons/volume-on.svg');
     }
   }
 }

@@ -88,6 +88,12 @@ document.addEventListener('DOMContentLoaded', () => {
       mp3: 'audio/Madonna - Frozen.mp3',
     },
   ];
+
+  let playList = [];
+
+  const favoriteList = localStorage.getItem('favorite') 
+  ? JSON.parse(localStorage.getItem('favorite'))
+  : []; 
   
   const pauseBtn = document.querySelector('.player__pause'),
   //getElement позволяет получить элементы динамически без перезагрузки страницы
@@ -95,6 +101,16 @@ document.addEventListener('DOMContentLoaded', () => {
         stopBtn = document.querySelector('.player__icon_stop'),
         catalogContainer = document.querySelector('.catalog__container'),
         player = document.querySelector('.player'),
+        timePassed = document.querySelector('.player__time-passed'),
+        timeTotal = document.querySelector('.player__time-total'),
+        playerProgressInput = document.querySelector('.player__progress-input'),
+        nextPlayerTrack = document.querySelector('.player__icon_next'),
+        prevPlayerTrack = document.querySelector('.player__icon_prev'),
+        favorBtn = document.querySelector('.header__favorite-btn'), 
+        likeBtn = document.querySelector('.player__icon_favorite'),
+        muteBtn = document.querySelector('.player__icon_mute'),
+        headerLogo = document.querySelector('.header__logo'),
+        playerVolumeInput = document.querySelector('.player__volume-input'),
         audio = new Audio;
 
 
@@ -112,11 +128,44 @@ document.addEventListener('DOMContentLoaded', () => {
     checkCount();
 
     catalogAddBtn.addEventListener('click', () => {
+
       [...tracksCard].forEach(track=> {
         track.style.display = '';
         catalogAddBtn.remove()
       })
-    })
+    });
+
+    favorBtn.addEventListener('click', () => {
+      const data = dataMusic.filter(el=> favoriteList.includes(el.id));
+      renderCatalog(data);
+      checkCount();
+    });
+    likeBtn.addEventListener('click', addTofavor);
+  };
+
+  const addTofavor = () => {
+    const index = favoriteList.indexOf(likeBtn.dataset.idTrack);
+    if(index === -1) {
+      likeBtn.classList.add('player__icon_favorite_active');
+      favoriteList.push(likeBtn.dataset.idTrack);
+    } else {
+      likeBtn.classList.remove('player__icon_favorite_active');
+      favoriteList.splice(index, 1);
+    }
+    localStorage.setItem('favorite', JSON.stringify(favoriteList))
+  }
+
+  const updateTime = () => {
+    	const duration = audio.duration,
+            currentTime = audio.currentTime,
+            progress = (currentTime / duration) * 100;
+      playerProgressInput.value = progress ? progress : 0;
+      const minutePassed = Math.floor(currentTime / 60) || '0',
+            secondsPassed = Math.floor(currentTime % 60) || '0',
+            minutesDuration = Math.floor(duration / 60) || '0',
+            secondsDuration = Math.floor(duration % 60) || '0';
+    timePassed.textContent = `${minutePassed}:${secondsPassed <10 ? '0' + secondsPassed:secondsPassed}`;
+    timeTotal.textContent = `${minutesDuration}:${secondsDuration <10 ? '0' + secondsDuration:secondsDuration}`;
   };
 
   const createCard = (data) => {
@@ -142,6 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const renderCatalog = (data) => {
+    playList = [...data];
     catalogContainer.textContent = '';
     const listCard = data.map(createCard);
     catalogContainer.append(...listCard); 
@@ -150,7 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const pausePlayer = () => {
     const trackActive = document.querySelector('.track_active');
-    console.log(trackActive);
     if(audio.paused) {
       audio.play();
       pauseBtn.classList.remove('player__icon_play');
@@ -164,26 +213,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const playMusic = event => {
     event.preventDefault();
+    let i = 0;
     const trackActive = event.currentTarget,
           id = trackActive.dataset.idTrack,
-          track = dataMusic.find(item => id === item.id);
-
-    if(trackActive.classList.contains('track_active')) {
-      pausePlayer()
-      return
-    };
-
+          track = playList.find((item, index) => {
+            i = index;
+            return id === item.id;
+          });
+    likeBtn.classList.remove('player__icon_favorite_active');
+    if(favoriteList.includes(id)){
+      likeBtn.classList.add('player__icon_favorite_active');
+    }   
     audio.src = track.mp3;
-
+    
     audio.play();
 
     pauseBtn.classList.remove('player__icon_play');
-    pauseBtn.classList.add('player__icon_pause');
-    player.classList.add('player_active');
-    for(let i = 0; i<tracksCard.length; i++){
-      tracksCard[i].classList.remove('track_active');
+    // pauseBtn.classList.add('player__icon_pause');
+    if(trackActive.classList.contains('track_active')){
+      pausePlayer()
     }
     trackActive.classList.add('track_active');
+    
+    const prevTrack = i === 0 ? playList.length - 1 : i - 1;
+    const nextTrack = (i+1) === playList.length ? 0 : i + 1;
+    prevPlayerTrack.dataset.idTrack = playList[prevTrack].id;
+    nextPlayerTrack.dataset.idTrack = playList[nextTrack].id;
+    likeBtn.dataset.idTrack = id;
+    
+
+    player.classList.add('player_active');
+
+    for(let i = 0; i<tracksCard.length; i++){
+      if(id === tracksCard[i].dataset.idTrack) {
+        tracksCard[i].classList.add('track_active');
+      } else {
+      tracksCard[i].classList.remove('track_active');
+      }
+    }
+
+
   }
 
   const addHandlerTrack = () => {
@@ -204,22 +273,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   pauseBtn.addEventListener('click', pausePlayer);
+  audio.addEventListener('timeupdate', updateTime)
+  playerProgressInput.addEventListener('change', ()=> {
+    const progress = playerProgressInput.value;
+    audio.currentTime = (progress / 100) * audio.duration;
+  });
 
+  nextPlayerTrack.addEventListener('click', playMusic);
+  prevPlayerTrack.addEventListener('click', playMusic);
 
   stopBtn.addEventListener('click', ()=> {
-    if(audio.currentTime !== 0){
-      audio.pause();
-      audio.currentTime = 0;
-      player.classList.remove('player_active');
-    } else  if(audio.paused){
-      audio.currentTime = 0;
-      audio.src = '';
-      pauseBtn.classList.remove('player__icon_play');
-      pauseBtn.classList.add('player__icon_pause');
+    audio.src = '';
+    player.classList.remove('player_active');
+    document.querySelector('.track_active').classList.remove('track_active');
+  });
+
+  audio.addEventListener('ended', () => {
+    nextPlayerTrack.dispatchEvent(new Event('click', {bubbles: true}))
+  });
+
+  headerLogo.addEventListener('click', () => {
+    renderCatalog(dataMusic);
+    checkCount();
+  });
+
+  muteBtn.addEventListener('click', ()=> {
+    if(audio.volume) {
+      audio.volume = 0
+      muteBtn.classList.add('player__icon_mute-on');
+    } else {
+      audio.volume = playerVolumeInput.value / 100;
+      muteBtn.classList.remove('player__icon_mute-on');
     }
+  });
+  playerVolumeInput.addEventListener('input', ()=>{
+    if(playerVolumeInput.value < 1){
+      muteBtn.classList.add('player__icon_mute-on');
+    } else {
+      audio.volume = playerVolumeInput.value / 100;
+      muteBtn.classList.remove('player__icon_mute-on');
+    }
+
   })
-
-
   init();
 
-})
+});
